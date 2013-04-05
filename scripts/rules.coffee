@@ -14,9 +14,9 @@
 #  ]
 
 rules = [
-  "1. Cory is a girl",
-  "2. Josh's mom is hot",
-  "3. Jeremy drinks too much"
+  "1. You is kind",
+  "2. You is smart",
+  "3. You is important"
 ]
 
 otherRules = [
