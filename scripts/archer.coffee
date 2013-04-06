@@ -28,6 +28,18 @@ module.exports = (robot) ->
   robot.hear /re black/i, (msg) ->
   	msg.reply "Oh, are they? Or are five in a dark black, and are five in a slightly darker black?"
 
+  robot.hear /\Wwon\W/i, (msg) ->
+    msg.reply "No way! It can't be. Jesus Christ, that is just... babytown frolics."
+
+  robot.hear /sorry/i, (msg) ->
+    msg.reply "Apology accepted. Ass douche."
+
+  robot.hear /(karate|judo|kung[ -]?fu|ta[ei] ?kw[ao]n ?do)/i, (msg) ->
+    msg.reply "#{msg.match[1].toString()[0].toUpperCase()}#{msg.match[1].toString()[1..-1]}?! The Dane Cook of martial arts?! No. ISIS agents use Krav Maga."
+
+  robot.hear /(cupcakes|cake|bagels|pie|candy|treats) in t(he|eh) breakroom/i, (msg) ->
+    msg.reply "Oh, for heaven's sake... do you want ants? Because that's how you get ants!"
+
   robot.hear /archer/i, (msg) ->
 
     options = {
