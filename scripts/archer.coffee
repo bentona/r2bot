@@ -22,6 +22,12 @@ module.exports = (robot) ->
   robot.hear /^sitting down/i, (msg) ->
     msg.reply "What?! At the table? Look, he thinks he's people!"
 
+  robot.hear /little/i, (msg) ->
+  	msg.reply "You know, when I was little I used to pretend that you weren't my mother."
+
+  robot.hear /re black/i, (msg) ->
+  	msg.reply "Oh, are they? Or are five in a dark black, and are five in a slightly darker black?"
+
   robot.hear /archer/i, (msg) ->
 
     options = {
