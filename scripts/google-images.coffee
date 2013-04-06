@@ -6,7 +6,7 @@
 #   hubot animate me <query> - The same thing as `image me`, except adds a few parameters to try to return an animated GIF instead.
 #   hubot mustache me <url> - Adds a mustache to the specified URL.
 #   hubot mustache me <query> - Searches Google Images for the specified query and mustaches it.
-#		hubot shiba me - Returns a random image from shibaconfessions.tumblr.com.
+#   hubot shiba me - Returns a random image from shibaconfessions.tumblr.com.
 
 module.exports = (robot) ->
   robot.respond /(image|img)( me)? (.*)/i, (msg) ->
@@ -18,8 +18,8 @@ module.exports = (robot) ->
       msg.send url
 
   robot.respond /shiba(?: me)?/i, (msg) ->
-  	imageMe msg, '', false, false, true, "shibaconfessions.tumblr.com", (url) ->
-  		msg.send url
+    imageMe msg, '', false, false, true, "shibaconfessions.tumblr.com", (url) ->
+      msg.send url
 
   robot.respond /(?:mo?u)?sta(?:s|c)he?(?: me)? (.*)/i, (msg) ->
     type = Math.floor(Math.random() * 3)
@@ -60,6 +60,8 @@ currentPageImg = (respData, msg, cb) ->
   images = respData.results
   if images?.length > 0
     cb "#{msg.random(images).url}#.png"
+  else
+    cb "lol...wut"
 
 googImgSearch = (q, msg, randomPage, cb) ->
   msg.http('http://ajax.googleapis.com/ajax/services/search/images')
