@@ -48,7 +48,9 @@ class WikiQuotes
       this.scrapeQuotes()
 
   all: -> @cache
-  randomQuote: -> @cache[Math.floor(Math.random() * @cache.length)]
+  randomQuote: (filterRegex) ->
+    filteredQuotes = if filterRegex then @cache.filter (quote) -> filterRegex.test(quote) else @cache
+    filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)]
 
   # I think the argument to scrapeQuotes is necessary because of scoping;
   # calling this.addQuoteArray did nothing.
@@ -62,5 +64,20 @@ class WikiQuotes
 module.exports = (robot) ->
   adQuotes = new WikiQuotes 'ArrestedDevelopment', '/Arrested_Development_(TV_series)', robot
 
-  robot.hear /arrested development/i, (msg) ->
+  robot.hear /trick/i, (msg) ->
+    msg.send "Illusion, #{msg.user?.name or 'Michael'}. A trick is something a whore does for money. ...or candy!"
+
+  robot.hear /(morning|weekend|evening|night)/i, (msg) ->
+    if Math.random() < .1
+      msg.send "Steve Holt!"
+
+  robot.hear /(money|cash)/i, (msg) ->
+    if Math.random() < .25
+    	msg.send 'How much clearer can I say it: "THERE IS ALWAYS MONEY IN THE BANANA STAND!"'
+
+  robot.hear /(maybe|maeby)/i, (msg) ->
+    if Math.random() < .15
+      msg.send adQuotes.randomQuote(/maeby/i)
+
+  robot.hear /(arrested|development|george|michael|gob|buster|bluth|banana|lucille)/i, (msg) ->
     msg.send adQuotes.randomQuote()
