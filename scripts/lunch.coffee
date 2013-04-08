@@ -14,6 +14,6 @@
 # bentona
 
 module.exports = (robot) ->
-	robot.respond /where(.)*(lunch|eat|food)/i, (msg) ->
+	robot.respond /where.*(lunch|eat|food)/i, (msg) ->
 		options = ["Muy Bueno","LJS","Burritoville","China Wok","Zoi's","Subway","Bagger Daves","Penn Station"]
-		msg.random(options)
+		msg.send "You should eat at" + msg.random(options)
