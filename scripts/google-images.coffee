@@ -57,7 +57,7 @@ randomPageImg = (respData, q, msg, cb) ->
       currentPageImg(respData, msg, cb)
 
 currentPageImg = (respData, msg, cb) ->
-  images = respData.results
+  images = respData?.results
   if images?.length > 0
     cb "#{msg.random(images).url}"
   else
