@@ -1,5 +1,5 @@
 # Description:
-#   Make hubot fetch quotes pertaining to the world's best secret agent, Archer.
+#   Make hubot fetch Archer quotes.
 #
 # Dependencies:
 #   "scraper": "0.0.9"
@@ -10,11 +10,13 @@
 # Commands:
 #
 # Author:
-#   rrix
+#   original archer.coffee: rrix
+#   refactored, generalized, robot.brain storage added: jbratton
 
-scraper = require 'scraper'
+WikiQuotes = require '../wikiquotes'
 
 module.exports = (robot) ->
+  archerQuotes = new WikiQuotes 'Archer_(TV_series)', robot
 
   robot.hear /^loggin/i, (msg) ->
     msg.reply "call Kenny Loggins, 'cuz you're in the DANGER ZONE."
@@ -23,10 +25,10 @@ module.exports = (robot) ->
     msg.reply "What?! At the table? Look, he thinks he's people!"
 
   robot.hear /little/i, (msg) ->
-  	msg.reply "You know, when I was little I used to pretend that you weren't my mother."
+    msg.reply "You know, when I was little I used to pretend that you weren't my mother."
 
   robot.hear /re black/i, (msg) ->
-  	msg.reply "Oh, are they? Or are five in a dark black, and are five in a slightly darker black?"
+    msg.reply "Oh, are they? Or are five in a dark black, and are five in a slightly darker black?"
 
   robot.hear /\Wwon\W/i, (msg) ->
     msg.reply "No way! It can't be. Jesus Christ, that is just... babytown frolics."
@@ -41,27 +43,7 @@ module.exports = (robot) ->
     msg.reply "Oh, for heaven's sake... do you want ants? Because that's how you get ants!"
 
   robot.hear /archer/i, (msg) ->
+    msg.reply archerQuotes.randomQuote()
 
-    options = {
-       'uri': 'http://en.wikiquote.org/wiki/Archer_(TV_series)',
-       'headers': {
-         'User-Agent': 'User-Agent: Archerbot for Hubot (+https://github.com/github/hubot-scripts)'
-       }
-    }
-
-    scraper options, (err, jQuery) ->
-      throw err  if err
-      quotes = jQuery("dl").toArray()
-      dialog = ''
-      quote = quotes[Math.floor(Math.random()*quotes.length)]
-      dialog += jQuery(quote).text().trim() + "\n"
-      msg.send dialog
-
-  # Make it possible to turn off a few of the more NSFW ones
-  unless process.env.HUBOT_ARCHER_SFW
-
-    robot.hear /^benoit/i, (msg) ->
-      msg.send "balls"
-
-    robot.hear /love/i, (msg) ->
-      msg.reply "And I love that I have an erection... that doesn't involve homeless people."
+  robot.hear /love/i, (msg) ->
+    msg.reply "And I love that I have an erection... that doesn't involve homeless people."
