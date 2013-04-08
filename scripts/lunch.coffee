@@ -16,5 +16,4 @@
 module.exports = (robot) ->
 	robot.respond /where(.)*(lunch|eat|food)/i, (msg) ->
 		options = ["Muy Bueno","LJS","Burritoville","China Wok","Zoi's","Subway","Bagger Daves","Penn Station"]
-		choice = options[Math.floor(Math.random() * options.length)]
-		msg.send "You sould go to " + choice
+		msg.random(options)
