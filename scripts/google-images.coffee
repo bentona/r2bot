@@ -59,7 +59,7 @@ randomPageImg = (respData, q, msg, cb) ->
 currentPageImg = (respData, msg, cb) ->
   images = respData.results
   if images?.length > 0
-    cb "#{msg.random(images).url}#.png"
+    cb "#{msg.random(images).url}"
   else
     cb "lol...wut"
 
