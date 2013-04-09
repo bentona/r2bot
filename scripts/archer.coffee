@@ -17,6 +17,10 @@ WikiQuotes = require '../wikiquotes'
 
 module.exports = (robot) ->
   archerQuotes = new WikiQuotes 'Archer_(TV_series)', robot
+  
+  robot.respond /archer me\s*(.*)/i, (msg) ->
+    quote = adQuotes.randomQuote(msg.match[1])
+    msg.send quote if quote
 
   robot.hear /^loggin/i, (msg) ->
     msg.reply "call Kenny Loggins, 'cuz you're in the DANGER ZONE."
@@ -35,9 +39,6 @@ module.exports = (robot) ->
 
   robot.hear /(cupcakes|cake|bagels|pie|candy|treats) in t(he|eh) breakroom/i, (msg) ->
     msg.reply "Oh, for heaven's sake... do you want ants? Because that's how you get ants!"
-
-  robot.hear /archer/i, (msg) ->
-    msg.reply archerQuotes.randomQuote()
 
   robot.hear /love/i, (msg) ->
     msg.reply "And I love that I have an erection... that doesn't involve homeless people."
