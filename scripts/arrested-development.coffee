@@ -20,7 +20,7 @@ module.exports = (robot) ->
   adQuotes = new WikiQuotes 'Arrested_Development_(TV_series)', robot
 
   robot.respond /AD me\s*(.*)/i, (msg) ->
-    quote = adQuotes.randomQuote(new RegExp(msg.match[1], 'i'))
+    quote = adQuotes.randomQuote(msg.match[1])
     msg.send quote if quote
 
   robot.hear /trick/i, (msg) ->
