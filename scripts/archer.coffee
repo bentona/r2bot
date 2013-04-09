@@ -19,7 +19,7 @@ module.exports = (robot) ->
   archerQuotes = new WikiQuotes 'Archer_(TV_series)', robot
   
   robot.respond /archer me\s*(.*)/i, (msg) ->
-    quote = adQuotes.randomQuote(msg.match[1])
+    quote = archerQuotes.randomQuote(msg.match[1])
     msg.send quote if quote
 
   robot.hear /^loggin/i, (msg) ->
