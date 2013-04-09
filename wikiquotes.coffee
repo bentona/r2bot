@@ -48,8 +48,8 @@ class WikiQuotes
       this.scrapeQuotes()
 
   all: -> @cache
-  randomQuote: (filterRegex) ->
-    filteredQuotes = if filterRegex then @cache.filter (quote) -> filterRegex.test(quote) else @cache
+  randomQuote: (filterString) ->
+    filteredQuotes = if filterString then @cache.filter (quote) -> new RegExp(filterString, 'i').test(quote) else @cache
     filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)]
 
   # I think the argument to scrapeQuotes is necessary because of scoping;
