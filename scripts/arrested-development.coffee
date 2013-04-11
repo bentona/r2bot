@@ -23,7 +23,7 @@ module.exports = (robot) ->
     quote = adQuotes.randomQuote(msg.match[1])
     msg.send quote if quote
 
-  robot.hear /trick/i, (msg) ->
+  robot.hear /trick /i, (msg) ->
     msg.send "Illusion, #{msg.envelope?.user?.name or 'Michael'}. A trick is something a whore does for money. ...or candy!"
 
   robot.hear /(morning|weekend|evening|night)/i, (msg) ->
