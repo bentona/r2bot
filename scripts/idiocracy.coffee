@@ -7,5 +7,5 @@ module.exports = (robot) ->
     quote = idiotQuotes.randomQuote(msg.match[1])
     msg.send quote if quote
 
-  robot.hear /money/i, (msg) ->
-    msg.send "I can't believe you like money too. We should hang out."
+  robot.hear /(coffee|starbucks)/i, (msg) ->
+    msg.send "Yeah, well, I really don't think we have time for a hand job, Joe."
