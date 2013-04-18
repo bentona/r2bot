@@ -32,7 +32,8 @@ module.exports = (robot) ->
     msg.reply "Oh, are they? Or are five in a dark black, and are five in a slightly darker black?"
 
   robot.hear /sorry/i, (msg) ->
-    msg.reply "Apology accepted. Ass douche."
+    if Math.random() < .1
+      msg.reply "Apology accepted. Ass douche."
 
   robot.hear /(karate|judo|kung[ -]?fu|ta[ei] ?kw[ao]n ?do)/i, (msg) ->
     msg.reply "#{msg.match[1].toString()[0].toUpperCase()}#{msg.match[1].toString()[1..-1]}?! The Dane Cook of martial arts?! No. ISIS agents use Krav Maga."
@@ -41,4 +42,5 @@ module.exports = (robot) ->
     msg.reply "Oh, for heaven's sake... do you want ants? Because that's how you get ants!"
 
   robot.hear /love/i, (msg) ->
-    msg.reply "And I love that I have an erection... that doesn't involve homeless people."
+    if Math.random() < .1
+      msg.reply "And I love that I have an erection... that doesn't involve homeless people."
