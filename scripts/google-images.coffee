@@ -21,6 +21,10 @@ module.exports = (robot) ->
     imageMe msg, '', false, false, true, "shibaconfessions.tumblr.com", (url) ->
       msg.send url
 
+  robot.respond /cyriak(?: me)?/i, (msg) ->
+    imageMe msg, '', false, false, true, "www.cyriak.co.uk", (url) ->
+      msg.send url
+      
   robot.respond /(?:mo?u)?sta(?:s|c)he?(?: me)? (.*)/i, (msg) ->
     type = Math.floor(Math.random() * 3)
     mustachify = "http://mustachify.me/#{type}?src="
