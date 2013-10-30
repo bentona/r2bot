@@ -15,6 +15,6 @@
 
 repository = "bentona/r2bot"
 module.exports = (robot) ->
-  robot.respond ///pushed to branch master of #{repository}///i, (msg) ->
+  robot.hear ///pushed to branch master of #{repository}///i, (msg) ->
     msg.send "You just pushed!"
     return
