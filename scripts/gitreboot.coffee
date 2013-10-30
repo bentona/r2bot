@@ -1,5 +1,5 @@
 # Description:
-#   Hubot delivers a pic from Reddit's /r/aww frontpage
+#   Reloads scripts when github notification of push to master is sent
 #
 # Dependencies:
 #   None
@@ -8,10 +8,10 @@
 #   None
 #
 # Commands:
-#   aww - Display the picture from /r/aww
+#   (none)
 #
 # Author:
-#   eliperkins
+#   bentona
 
 repository = "bentona/r2bot"
 module.exports = (robot) ->
