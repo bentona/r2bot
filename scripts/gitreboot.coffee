@@ -12,9 +12,16 @@
 #
 # Author:
 #   bentona
-
+###
 repository = "bentona/r2bot"
 module.exports = (robot) ->
   robot.hear ///pushed to branch master of #{repository}///i, (msg) ->
     msg.send "You just pushed!"
     return
+###
+module.exports = (robot) ->
+  robot.hear /branch/i, (msg) ->
+    msg.send "I HEARD SOMETHIN"
+    return
+
+
