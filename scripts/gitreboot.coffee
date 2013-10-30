@@ -20,7 +20,8 @@ module.exports = (robot) ->
     return
 ###
 module.exports = (robot) ->
-  robot.hear /branch/i, (msg) ->
+  robot.hear /(.*)branch(.*)/i, (msg) ->
+    console.log JSON.stringify msg.match
     msg.send "I HEARD SOMETHIN"
     return
 
