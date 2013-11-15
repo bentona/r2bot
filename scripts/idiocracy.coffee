@@ -8,4 +8,5 @@ module.exports = (robot) ->
     msg.send quote if quote
 
   robot.hear /(coffee|starbucks)/i, (msg) ->
-    msg.send "Yeah, well, I really don't think we have time for a hand job, Joe."
+    if Math.random() < .1
+      msg.send "Yeah, well, I really don't think we have time for a hand job, Joe."
