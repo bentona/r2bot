@@ -83,14 +83,14 @@ Coffer = {
 	monsterFactory: (lvl) ->
 		type = this.getRandom(this.monsterTypes)
 		mod = this.getRandom(Object.keys(this.monsterMods))
-		baseMonster = creature("#{mod} #{type}", this.ndice(lvl, 2), this.ndice(lvl,2), lvl + this.ndice(lvl,3))
-		moddedMonster = monsterMods[mod](baseMonster)
+		baseMonster = this.creature("#{mod} #{type}", this.ndice(lvl, 2), this.ndice(lvl,2), lvl + this.ndice(lvl,3))
+		moddedMonster = this.monsterMods[mod](baseMonster)
 		moddedMonster.level = lvl
 		moddedMonster
 
 	attack: (a, b) ->
 		if (this.roll(10) > 1) || a.doesHit(b)
-			damage = this.this.roll(a.str)
+			damage = this.roll(a.str)
 			b.hp -= damage
 			return damage
 		else
