@@ -36,10 +36,29 @@ Coffer = {
 			doesHit: (target) -> (Cutil.ndice(this.str, 6) > Cutil.ndice(target.dex, 6))
 
 			heal: (n = this.max_hp) -> this.hp = Math.min(this.max_hp, this.hp + n)
+
+			to_json: () -> {
+				name
+				str
+				dex
+				max_hp
+				hp
+				level
+				xp
+				inventory
+			}
 		}
 
 	newHero: (name) ->
-		this.creature(name, 3, 3, 5)
+		this.creature(name, 3 + Cutil.roll(2), 3 + Cutil.roll(2), 6 + Cutil.roll(3))
+
+	heroFromJSON: (json) ->
+		c = this.creature(json.name, json.str, json.dex, json.max_hp)
+		c.hp = json.hp
+		c.level = json.level
+		c.xp = json.xp
+		c.inventory = json.inventory
+		c
 
 	loot: [
 		'buttcoin',
@@ -60,7 +79,11 @@ Coffer = {
 		'eddie',
 		'tug',
 		'socialist',
-		'Internet Explorer'
+		'Internet Explorer',
+		'BRT',
+		'Cantwell',
+		'Mike Howe',
+		"ANH ANH ANH ANH"
 	]
 
 	monsterMods: {
@@ -150,6 +173,7 @@ Coffer = {
 		return "You gained #{itemListing}\n#{xpString}\n"
 
 	adventure: (hero) ->
+		return false if ! hero.alive()
 		monster = this.monsterFactory(hero.level)
 		mlvl = monster.level
 		fightText = this.fight(hero, monster)
