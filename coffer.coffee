@@ -132,7 +132,7 @@ Coffer = {
 		moddedMonster
 
 	attack: (a, b) ->
-		if (Cutil.roll(10) > 1) || a.doesHit(b)
+		if (Cutil.roll(10) == 10) || a.doesHit(b)
 			damage = Cutil.roll(a.str)
 			b.hp -= damage
 			return damage
