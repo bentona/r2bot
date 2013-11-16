@@ -18,6 +18,7 @@ Coffer = {
 			level: 1
 			xp: 0
 			inventory: {}
+			high: false
 
 			alive: () -> this.hp > 0
 
@@ -31,23 +32,39 @@ Coffer = {
 
 			statSummary: () -> "str: #{this.str}\tdex: #{this.dex}\nhp: #{this.hp}\tXP: #{this.xp}"
 
-			characterSheet: () -> "#{this.statSummary()}\n#{this.inventorySummary()}"
+			characterSheet: () -> "#{this.name}\n#{this.statSummary()}\n#{this.inventorySummary()}"
 			
 			doesHit: (target) -> (Cutil.ndice(this.str, 6) > Cutil.ndice(target.dex, 6))
 
-			heal: (n = this.max_hp) -> this.hp = Math.min(this.max_hp, this.hp + n)
+			heal: (n = this.max_hp) -> this.hp = Math.min(this.max_hp, this.hp + n); this.high = false;
 
-			to_json: () -> {
-				name
-				str
-				dex
-				max_hp
-				hp
-				level
-				xp
-				inventory
+			serialize: () -> {
+				name: this.name
+				str: this.str
+				dex: this.dex
+				max_hp: this.max_hp
+				hp: this.hp
+				level: this.level
+				xp: this.xp
+				inventory: this.inventory
 			}
+
+			getHigh: () ->
+				drugs = ['skeebie blint','purp scurp']
+				available = (d for d of this.inventory when this.inventory[d] > 0)
+				if available.length < 1
+					return false
+				else
+					drug = this.inventory[available[0]]
+					this.high = true
+					this.inventory[drug] = this.inventory[drug] - 1
+					delete this.inventory[drug] if this.inventory[drug] == 0
+					return true
+
+
 		}
+	takeItem: () ->
+		#
 
 	newHero: (name) ->
 		this.creature(name, 3 + Cutil.roll(2), 3 + Cutil.roll(2), 6 + Cutil.roll(3))
@@ -61,13 +78,11 @@ Coffer = {
 		c
 
 	loot: [
+		'(plus1)',
 		'buttcoin',
 		'(awww)',
 		'moog synthesizer',
-		'raspberry pi',
-		'MacBook Pro',
 		'iPad Air',
-		'fiverr',
 		'(mbjb)',
 		'(ctddfn)',
 		'(benspants)',
@@ -129,7 +144,7 @@ Coffer = {
 			message = "#{a.name} did #{hit} damage to #{b.name}\n"
 		else
 			message = "#{a.name} missed #{b.name}\n"
-		message += "#{b.name} is defeated!\n" if !b.alive()
+		message += "(boom) #{b.name} is defeated!\n" if !b.alive()
 		return message
 
 	battleTurn: (a,b) ->
@@ -165,28 +180,27 @@ Coffer = {
 		reward
 
 	getDefeat: (hero, mlvl) ->
-		"You died cause you suck"
+		"(failed) You died cause you suck"
 
 	rewardString: (reward) ->
 		itemListing = ("#{quantity}x #{item}" for item,quantity of reward.items).join(', ')
-		xpString = "You gained #{reward.xp} XP"
-		return "You gained #{itemListing}\n#{xpString}\n"
+		xpString = "(mindblown) You gained #{reward.xp} XP"
+		return "(santa) You gained #{itemListing}\n#{xpString}\n"
 
 	adventure: (hero) ->
 		return false if ! hero.alive()
 		monster = this.monsterFactory(hero.level)
 		mlvl = monster.level
-		fightText = this.fight(hero, monster)
+		message = "(ninja) You've encountered a level #{mlvl} #{monster.name}\n"
+		details = this.fight(hero, monster)
 		if hero.alive()
 			reward = this.getReward(hero, mlvl)
 			hero.addXP(reward.xp)
 			hero.addItems(reward.items)
-			message = this.rewardString(reward)
+			message += this.rewardString(reward)
 		else
-			message = this.getDefeat(hero, mlvl)
-		return [fightText, message]
+			message += this.getDefeat(hero, mlvl)
+		return "#{message}\nDetails:\n#{details}"
 }
 exports.Coffer = Coffer
-
-
 
