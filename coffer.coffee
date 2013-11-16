@@ -8,12 +8,13 @@ Cutil = {
 
 Coffer = {
 
-	creature: (name,str,dex,hp) ->
+	creature: (name,str,dex,max_hp) ->
 		{
 			name: name
 			str: str
 			dex: dex
-			hp: hp
+			max_hp: max_hp
+			hp: max_hp
 			level: 1
 			xp: 0
 			inventory: {}
@@ -30,9 +31,11 @@ Coffer = {
 
 			statSummary: () -> "str: #{this.str}\tdex: #{this.dex}\nhp: #{this.hp}\tXP: #{this.xp}"
 
-			characterSheet: () -> "#{statSummary()}\n#{this.inventorySummary()}"
+			characterSheet: () -> "#{this.statSummary()}\n#{this.inventorySummary()}"
 			
 			doesHit: (target) -> (Cutil.ndice(this.str, 6) > Cutil.ndice(target.dex, 6))
+
+			heal: (n = this.max_hp) -> this.hp = Math.min(this.max_hp, this.hp + n)
 		}
 
 	newHero: (name) ->
