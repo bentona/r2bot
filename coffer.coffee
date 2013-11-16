@@ -2,9 +2,9 @@ Coffer = {
 
 	roll: (n) -> Math.floor(Math.random() * n) + 1
 
-	ndice: (n, sides) -> (roll(sides) for _ in [1..n]).reduce (x,y) -> x + y
+	ndice: (n, sides) -> (this.roll(sides) for _ in [1..n]).reduce (x,y) -> x + y
 
-	getRandom: (arr) -> arr[roll(arr.length) - 1]
+	getRandom: (arr) -> arr[this.roll(arr.length) - 1]
 
 	creature: (name,str,dex,hp) ->
 		{
@@ -30,7 +30,7 @@ Coffer = {
 
 			characterSheet: () -> "#{statSummary()}\n#{this.inventorySummary()}"
 			
-			doesHit: (target) -> (ndice(this.str, 6) > ndice(target.dex, 6))
+			doesHit: (target) -> (this.ndice(this.str, 6) > this.ndice(target.dex, 6))
 		}
 
 	newHero: (name) ->
@@ -60,37 +60,37 @@ Coffer = {
 
 	monsterMods: {
 		beefy: (monster) ->
-			monster.str += roll(2)
+			monster.str += this.roll(2)
 			monster
 
 		scrawny: (monster) ->
-			monster.str = Math.max(monster.str - roll(2) , 1)
+			monster.str = Math.max(monster.str - this.roll(2) , 1)
 			monster
 
 		portly: (monster) ->
-			monster.hp += roll(3)
+			monster.hp += this.roll(3)
 			monster
 
 		slovenly: (monster) ->
-			monster.hp += roll(6)
+			monster.hp += this.roll(6)
 			monster
 
 		devious: (monster) ->
-			monster.dex += roll(2)
+			monster.dex += this.roll(2)
 			monster
 	}
 
 	monsterFactory: (lvl) ->
 		type = this.getRandom(this.monsterTypes)
 		mod = this.getRandom(Object.keys(this.monsterMods))
-		baseMonster = creature("#{mod} #{type}", ndice(lvl, 2), ndice(lvl,2), lvl + ndice(lvl,3))
+		baseMonster = creature("#{mod} #{type}", this.ndice(lvl, 2), this.ndice(lvl,2), lvl + this.ndice(lvl,3))
 		moddedMonster = monsterMods[mod](baseMonster)
 		moddedMonster.level = lvl
 		moddedMonster
 
 	attack: (a, b) ->
-		if (roll(10) > 1) || a.doesHit(b)
-			damage = this.roll(a.str)
+		if (this.roll(10) > 1) || a.doesHit(b)
+			damage = this.this.roll(a.str)
 			b.hp -= damage
 			return damage
 		else
@@ -128,7 +128,7 @@ Coffer = {
 
 	getReward: (hero, mlvl) ->
 		reward = {
-			xp: mlvl + roll(mlvl)
+			xp: mlvl + this.roll(mlvl)
 			items: {}
 		}
 		for i in [1..mlvl]
