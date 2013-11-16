@@ -1,4 +1,4 @@
-coffer = {
+Coffer = {
 
 	roll: (n) -> Math.floor(Math.random() * n) + 1
 
@@ -81,8 +81,8 @@ coffer = {
 	}
 
 	monsterFactory: (lvl) ->
-		type = getRandom(monsterTypes)
-		mod = getRandom(Object.keys(monsterMods))
+		type = this.getRandom(this.monsterTypes)
+		mod = this.getRandom(Object.keys(this.monsterMods))
 		baseMonster = creature("#{mod} #{type}", ndice(lvl, 2), ndice(lvl,2), lvl + ndice(lvl,3))
 		moddedMonster = monsterMods[mod](baseMonster)
 		moddedMonster.level = lvl
@@ -157,6 +157,7 @@ coffer = {
 			message = this.getDefeat(hero, mlvl)
 		return [fightText, message]
 }
+exports.Coffer = Coffer
 
 
 
