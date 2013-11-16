@@ -83,8 +83,8 @@ Coffer = {
 	}
 
 	monsterFactory: (lvl) ->
-		type = this.getRandom(this.monsterTypes)
-		mod = this.getRandom(Object.keys(this.monsterMods))
+		type = Cutil.getRandom(this.monsterTypes)
+		mod = Cutil.getRandom(Object.keys(this.monsterMods))
 		baseMonster = this.creature("#{mod} #{type}", Cutil.ndice(lvl, 2), Cutil.ndice(lvl,2), lvl + Cutil.ndice(lvl,3))
 		moddedMonster = this.monsterMods[mod](baseMonster)
 		moddedMonster.level = lvl
@@ -134,7 +134,7 @@ Coffer = {
 			items: {}
 		}
 		for i in [1..mlvl]
-			item = this.getRandom(this.loot)
+			item = Cutil.getRandom(this.loot)
 			reward.items[item] = (reward.items[item] || 0) + 1
 		reward
 
