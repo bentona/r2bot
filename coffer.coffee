@@ -96,7 +96,7 @@ coffer = {
 		else
 			return false
 
-	turnMessage = (a, b, hit) ->
+	turnMessage: (a, b, hit) ->
 		if hit
 			message = "#{a.name} did #{hit} damage to #{b.name}\n"
 		else
