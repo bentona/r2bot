@@ -4,93 +4,101 @@ Cutil = {
 	ndice: (n, sides) -> (this.roll(sides) for _ in [1..n]).reduce (x,y) -> x + y
 
 	getRandom: (arr) -> arr[this.roll(arr.length) - 1]
+
+	doesHit: (attacker, defender) ->
+		# roll (str)d6 vs (dex)d6
+		(Cutil.ndice(attacker.getStr(), 6) > Cutil.ndice(defender.getDex(), 6))
 }
 
-Coffer = {
+class Status
+	constructor: (@effect, @message) ->
+		# nothin
 
-	creature: (name,str,dex,max_hp) ->
-		{
-			name: name
-			str: str
-			dex: dex
-			max_hp: max_hp
-			hp: max_hp
-			level: 1
-			xp: 0
-			inventory: {}
-			high: false
+	affect: (hero) ->
+		@effect(hero)
 
-			alive: () -> this.hp > 0
+class High extends CofferStatus
+	constructor: () ->
+		high = (hero) -> hero.effects.dex -= 1
+		super(high, "You're like, totally blazed.")
 
-			addXP: (xp) -> this.xp += xp
+class CofferCreature
+	constructor: (@name, @stats, @status = nil) ->
+		@stats.hp = @stats.max_hp if not 'hp' of @stats
 
-			addItems: (items) ->
-				for k,v of items
-					this.inventory[k] = ((this.inventory[k] || 0) + v)
-				
-			inventorySummary: () -> ("#{v}x #{k}" for k,v of this.inventory).join("\n")
+	getDex: () -> @stats.dex + @effects?.dex?
 
-			statSummary: () -> "str: #{this.str}\tdex: #{this.dex}\nhp: #{this.hp}\tXP: #{this.xp}"
+	getStr: () -> @stats.str + @effects?.str?
 
-			characterSheet: () -> "#{this.name}\n#{this.statSummary()}\n#{this.inventorySummary()}"
-			
-			doesHit: (target) -> (Cutil.ndice(this.str, 6) > Cutil.ndice(target.dex, 6))
+	alive: () -> @hp > 0
 
-			heal: (n = this.max_hp) -> this.hp = Math.min(this.max_hp, this.hp + n); this.high = false;
+	heal: (n = this.max_hp) -> 
+		@hp = Math.min(@max_hp, @hp + n)
+		# TODO: A better status system
+		@status = {}
 
-			serialize: () -> {
-				name: this.name
-				str: this.str
-				dex: this.dex
-				max_hp: this.max_hp
-				hp: this.hp
-				level: this.level
-				xp: this.xp
-				inventory: this.inventory
-			}
+	damage: (n) ->
+		@hp = Math.max(0, @hp - n)
 
-			getHigh: () ->
-				drugs = ['skeebie blint','purp scurp']
-				available = (d for d of this.inventory when this.inventory[d] > 0)
-				if available.length < 1
-					return false
-				else
-					drug = this.inventory[available[0]]
-					this.high = true
-					this.inventory[drug] = this.inventory[drug] - 1
-					delete this.inventory[drug] if this.inventory[drug] == 0
-					return true
+	addItems: (items) -> # TODO: This is crappy, we need a separate inventory class.
+		for k,v of items
+			@inventory[k] = ((@inventory[k] || 0) + v)
 
 
+class CofferHero extends CofferCreature
+
+	constructor: (name, stats) ->
+		super(name, stats)
+
+	@newHero: (name) ->
+		stats = {
+			str: 3 + Cutil.roll(2)
+			dex: 3 + Cutil.roll(2)
+			max_hp: 6 + Cutil.roll(3)
 		}
-	takeItem: () ->
-		#
+		new CofferHero(name, stats)
 
-	newHero: (name) ->
-		this.creature(name, 3 + Cutil.roll(2), 3 + Cutil.roll(2), 6 + Cutil.roll(3))
-
-	heroFromJSON: (json) ->
-		c = this.creature(json.name, json.str, json.dex, json.max_hp)
-		c.hp = json.hp
-		c.level = json.level
-		c.xp = json.xp
+	@heroFromJSON: (json) ->
+		status
+		c = new CofferHero(json.name, json.stats)
 		c.inventory = json.inventory
 		c
 
-	loot: [
-		'(plus1)',
-		'buttcoin',
-		'(awww)',
-		'moog synthesizer',
-		'iPad Air',
-		'(mbjb)',
-		'(ctddfn)',
-		'(benspants)',
-		'skeebie blint',
-		'purp scurp'
-	]
+	level: () -> Math.ceil(Math.log(@xp + 2,2))
 
-	monsterTypes: [
+	addXP: (points) -> @xp += points
+
+	inventorySummary: () -> ("#{v}x #{k}" for k,v of @inventory).join("\n")
+
+	statSummary: () -> "str: #{@str}\tdex: #{@dex}\nhp: #{@hp}\tXP: #{@xp}"
+
+	characterSheet: () -> "#{@name}\n#{@statSummary()}\n#{@inventorySummary()}"
+
+	serialize: () -> {
+		stats: @stats
+		xp: @xp
+		inventory: @inventory
+		status: this.status
+	}
+
+class CofferTreasure
+	random: () ->
+		loot: [
+			'(plus1)',
+			'buttcoin',
+			'(awww)',
+			'moog synthesizer',
+			'iPad Air',
+			'(mbjb)',
+			'(ctddfn)',
+			'(benspants)',
+			'skeebie blint',
+			'purp scurp'
+		]
+		Cutil.getRandom(loot)
+
+class CofferMonster extends CofferCreature
+	@monsterTypes: [
 		'eddie',
 		'tug',
 		'socialist',
@@ -101,7 +109,7 @@ Coffer = {
 		"ANH ANH ANH ANH"
 	]
 
-	monsterMods: {
+	@monsterMods: {
 		beefy: (monster) ->
 			monster.str += Cutil.roll(2)
 			monster
@@ -123,18 +131,28 @@ Coffer = {
 			monster
 	}
 
-	monsterFactory: (lvl) ->
-		type = Cutil.getRandom(this.monsterTypes)
-		mod = Cutil.getRandom(Object.keys(this.monsterMods))
-		baseMonster = this.creature("#{mod} #{type}", Cutil.ndice(lvl, 2), Cutil.ndice(lvl,2), lvl + Cutil.ndice(lvl,3))
-		moddedMonster = this.monsterMods[mod](baseMonster)
-		moddedMonster.level = lvl
-		moddedMonster
+	@randomMonster: (lvl) ->
+		type = Cutil.getRandom(CofferMonster.monsterTypes)
+		mod = Cutil.getRandom(Object.keys(CofferMonster.monsterMods))
+		name = "#{mod} #{type}"
+		stats = {
+			str: Cutil.ndice(lvl, 2),
+			dex: Cutil.ndice(lvl, 2),
+			max_hp: lvl + Cutil.ndice(lvl,3)
+		}
+		new CofferMonster(name, stats, [mod])
 
+	constructor: (name, stats, mods) ->
+		super(name, stats)
+		for mod in mods
+			mod(@)
+		@
+
+class CofferGame
 	attack: (a, b) ->
 		if (Cutil.roll(10) == 10) || a.doesHit(b)
 			damage = Cutil.roll(a.str)
-			b.hp -= damage
+			b.damage(damage)
 			return damage
 		else
 			return false
