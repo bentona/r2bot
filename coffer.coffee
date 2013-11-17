@@ -131,11 +131,11 @@ class CofferMonster extends CofferCreature
 	]
 
 	@monsterMods: {
-		beefy: (monster) -> monster.str += Cutil.roll(2)
-		scrawny: (monster) -> monster.str = Math.max(monster.str - Cutil.roll(2) , 1)
-		portly: (monster) -> monster.hp += Cutil.roll(3)
-		slovenly: (monster) -> monster.hp += Cutil.roll(6)
-		devious: (monster) -> monster.dex += Cutil.roll(2)
+		beefy: (monster) -> monster.stats.str += Cutil.roll(2)
+		scrawny: (monster) -> monster.stats.str = Math.max(monster.stats.str - Cutil.roll(2) , 1)
+		portly: (monster) -> monster.stats.max_hp += Cutil.roll(3)
+		slovenly: (monster) -> monster.stats.max_hp += Cutil.roll(6)
+		devious: (monster) -> monster.stats.dex += Cutil.roll(2)
 	}
 
 	loot: () ->
