@@ -225,3 +225,11 @@ class CofferGame
 }
 exports.Coffer = Coffer
 
+# TODO messaging system
+# Move interface to lib
+# Split file, create include file
+# Item effects
+# Leveling up
+# Better loot system
+# Weapons with dynamic damage
+# Spells
