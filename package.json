@@ -24,7 +24,8 @@
     "hubot-scripts": ">= 2.4.2",
     "hubot-hipchat": "~2.5.1-5",
 		"scraper": "*",
-		"bang": "*"
+		"bang": "*",
+		"twss": "*"
   },
   "engines": {
     "node": ">= 0.8.x",
